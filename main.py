@@ -43,5 +43,16 @@ for i in range(len(dataONTO)):
     print(i)
     process(dataONTO['tokens'][i], dataONTO['ner_tags_str'][i], dataONTO['pos_tags'][i])
 
+    # Open a file and use dump()
+
+    if i%100 == 0:
+
+        with open('dictionary.pkl', 'wb') as file:
+            # A new file will be created
+            pickle.dump(d, file)
+
+with open('dictionary.pkl', 'wb') as file:
+    # A new file will be created
+    pickle.dump(d, file)
 
 
