@@ -1,6 +1,7 @@
 import pickle
 import datasets
 from collections import defaultdict
+from numba import jit, cuda
 
 dataCONLL = ""
 dataONTO = ""
@@ -21,24 +22,26 @@ d = defaultdict(lambda: [])
 
 print(f"TODO {len(dataONTO)}")
 
-for i in range(len(dataONTO)):
-    print(i)
-    print(dataONTO['tokens'][i])
-    print(dataONTO['ner_tags_str'][i])
-    for j in range(len(dataONTO['tokens'][i])):
-        if dataONTO['ner_tags_str'][i][j].startswith("B-"):
+@jit(target_backend='cuda')
+def process(tokens, ner_tags, pos_tags):
+    for j in range(len(tokens)):
+        if ner_tags[j].startswith("B-"):
 
-            type = dataONTO['ner_tags_str'][i][j].replace("B-", "")
+            type = ner_tags[j].replace("B-", "")
 
-            whole_group = [(dataONTO['ner_tags_str'][i][j], dataONTO['pos_tags'][i][j])]
+            whole_group = [(ner_tags[j], pos_tags[j])]
 
-            while j+1 < len(dataONTO['ner_tags_str'][i]) and dataONTO['ner_tags_str'][i][j+1].startswith("I-"):
-                whole_group.append((dataONTO['ner_tags_str'][i][j+1], dataONTO['pos_tags'][i][j+1]))
+            while j+1 < len(ner_tags) and ner_tags[j+1].startswith("I-"):
+                whole_group.append((ner_tags[j+1], pos_tags[j+1]))
                 j += 1
 
             print(f"TEST {type} {whole_group}")
 
             d[type].append(whole_group)
+
+for i in range(len(dataONTO)):
+    print(i)
+    process(dataONTO['tokens'][i], dataONTO['ner_tags_str'][i], dataONTO['pos_tags'][i])
 
 
 
