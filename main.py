@@ -18,11 +18,10 @@ print(dataCONLL['pos_tags'][100])
 print(dataCONLL['doc'][100])
 print(dataONTO)
 
-d = defaultdict(lambda: [])
+d = {"O": [], "PERSON": [], "NORP": [], "FAC": [], "ORG": [], "GPE": [], "LOC": [], "PRODUCT": [], "DATE": [], "TIME": [], "PERCENT": [], "MONEY": [], "QUANTITY": [], "ORDINAL": [], "CARDINAL": [], "EVENT": [], "WORK_OF_ART": [], "LAW": [], "LANGUAGE": []}
 
 print(f"TODO {len(dataONTO)}")
 
-@jit(target_backend='cuda')
 def process(tokens, ner_tags, pos_tags):
     for j in range(len(tokens)):
         if ner_tags[j].startswith("B-"):
@@ -45,7 +44,7 @@ for i in range(len(dataONTO)):
 
     # Open a file and use dump()
 
-    if i%100 == 0:
+    if i%10 == 0:
 
         with open('dictionary.pkl', 'wb') as file:
             # A new file will be created
