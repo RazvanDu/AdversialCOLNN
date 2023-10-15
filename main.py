@@ -48,7 +48,7 @@ def process_2(i):
     return d
 
 with Pool(256) as p:
-    numbers = p.map(process_2, range(dataONTO))
+    numbers = p.map(process_2, range(len(dataONTO)))
 
 d = {"O": set(), "PERSON": set(), "NORP": set(), "FAC": set(), "ORG": set(), "GPE": set(), "LOC": set(), "PRODUCT": set(), "DATE": set(), "TIME": set(), "PERCENT": set(), "MONEY": set(), "QUANTITY": set(), "ORDINAL": set(), "CARDINAL": set(), "EVENT": set(), "WORK_OF_ART": set(), "LAW": set(), "LANGUAGE": set()}
 
