@@ -27,79 +27,6 @@ to_replace = {
     "ORG": list(loaded['ORG'])
 }
 
-def process_2(i):
-
-    print(i)
-
-    doc_dif = 0
-
-    #tokens = dataCONLL['tokens'][i]
-    #pos = dataCONLL['pos_tags'][i]
-    #tags = dataCONLL['ner_tags_str'][i]
-
-    j = 0
-
-    ln = len(dataCONLL['tokens'][i])
-
-    result_tokens = []
-    result_tags = []
-    result_pos = []
-
-    while j < ln:
-        #print("J ", j)
-
-        if dataCONLL['ner_tags_str'][i][j][0] == 'I' and dataCONLL['ner_tags_str'][i][j][1] == '-':
-            j = j+1
-            continue
-
-        if dataCONLL['ner_tags_str'][i][j][0] == 'B' and dataCONLL['ner_tags_str'][i][j][1] == '-':#
-
-            type = dataCONLL['ner_tags_str'][i][j].replace("B-", "")
-
-            temp_j = j
-
-            while temp_j+1 < len(dataCONLL['tokens'][i]) and dataCONLL['ner_tags_str'][i][temp_j+1].startswith("I-"):
-                temp_j += 1
-
-            temp_j += 1
-
-            temp = random.choice(to_replace[type])
-
-            replace_tokens = [val[0] for val in temp]
-            replace_pos = [val[1] for val in temp]
-            replace_tags = [("B-" + type) if i == 0 else ("I-" + type) for i in range(len(temp))]
-
-            result_tokens.extend(replace_tokens)
-            result_tags.extend(replace_tags)
-            result_pos.extend(replace_pos)
-
-        else:
-
-            result_tokens.append(dataCONLL['tokens'][i][j])
-            result_tags.append(dataCONLL['ner_tags_str'][i][j])
-            #print(len(dataCONLL['tokens'][i]), " + ", len(dataCONLL['pos_tags'][i]))
-            if(len(dataCONLL['pos_tags'][i]) == 0):
-                result_pos.append(0)
-
-        #print("J ", result_tokens)
-
-        j += 1
-
-    print("HERE ", final_tokens)
-
-    final_tokens[i] = final_tokens
-
-    print("HERE2 ", final_tokens)
-
-    final_pos[i] = final_pos
-    final_tags[i] = final_tags
-
-    #dataCONLL['doc'][i] = ln
-
-    #process(dataONTO['tokens'][i], dataONTO['ner_tags_str'][i], dataONTO['pos_tags'][i], d)
-
-    return i
-
 #with Pool(1) as p:
 #    numbers = p.map(process_2, range(5, 6))
 
@@ -149,10 +76,10 @@ def update_dataset(example, i):
             result_tokens.append(example['tokens'][j])
             result_tags.append(example['ner_tags_str'][j])
             # print(len(example['tokens']), " + ", len(example['pos_tags']))
-            if (len(example['pos_tags']) == 0):
+            if len(example['pos_tags']) == 0:
                 result_pos.append(0)
-
-        # print("J ", result_tokens)
+            else:
+                result_pos.append(example['pos_tags'][j])
 
         j += 1
 
