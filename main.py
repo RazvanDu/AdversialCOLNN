@@ -20,13 +20,23 @@ def process(tokens, ner_tags, pos_tags, d):
 
             type = ner_tags[j].replace("B-", "")
 
-            whole_group = [(tokens[j], pos_tags[j])]
+            # Remove determiners
+            # Check if not in CONLL already by only words in the training test
+
+            #print(tokens[j], " + ", pos_tags[j])
+
+            if pos_tags[j] != 13:
+                whole_group = [(tokens[j], pos_tags[j])]
+            else:
+                whole_group = []
 
             while j+1 < ln and ner_tags[j+1].startswith("I-"):
-                whole_group.append((tokens[j+1], pos_tags[j+1]))
+                if pos_tags[j+1] != 13:
+                    whole_group.append((tokens[j+1], pos_tags[j+1]))
                 j += 1
 
-            d[type].add(tuple(whole_group))
+            if len(whole_group) != 0:
+                d[type].add(tuple(whole_group))
 
 def process_2(example, i):
 
