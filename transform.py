@@ -24,7 +24,7 @@ final_tags = dict()
 final_pos = dict()
 
 to_replace = {
-    "LOC": list(loaded['FAC'].union(loaded['GPE'])),
+    "LOC": list(loaded['GPE']),
     "MISC": list(loaded['PRODUCT'].union(loaded['WORK_OF_ART']).union(loaded['NORP'])),
     "PER": list(loaded['PERSON']),
     "ORG": list(loaded['ORG'])
